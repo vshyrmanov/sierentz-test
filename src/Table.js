@@ -15,7 +15,7 @@ function CustomTable() {
     const uniqueYears = getUniqueYear(Object.keys(data), data);
 
     const popUp = () => {
-        window.open('/popup', 'popUpWindow','height=500,width=1000,scrollbars=yes');
+        window.open('/popup',  "_blank", 'height=500,width=1000,scrollbars=yes', );
     };
 
     return (
