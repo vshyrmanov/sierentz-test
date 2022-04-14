@@ -9,7 +9,15 @@ export const getDate = () => {
 
 export const getDataTable = (data) => {
     const rows = Object.keys(data);
-    return rows.map(e => ({region: e, data: data[e].G}))
+    return rows.map(e => ({region: e, data: data[e].G}));
+}
+
+export const getSubYears = (data) => {
+    const rows = Object.keys(data);
+    let subYears = [];
+    const arrayOfSubYears = rows.map(e => Object.keys(data[e].G['2017']));
+    arrayOfSubYears.map(e => e.map(i => subYears.push(i)));
+    return [...new Set(subYears)];
 }
 
 export const getUniqueYear = (arr, data) => {

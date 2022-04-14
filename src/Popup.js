@@ -17,7 +17,8 @@ const Popup = () => {
         {value: 7, date: "20.05.2021", user: "Jim", comment: "comment 4"},
     ])
 
-    let selectProps = popupData.map(e => e.user);
+    let usersArr = popupData.map(e => e.user);
+    let selectProps = [...new Set(usersArr)];
 
     const [value, setValue] = useState(
         {
@@ -72,7 +73,6 @@ const Popup = () => {
                             </TableCell>
                             <TableCell align={"center"}>
                                 <Input
-                                    defaultValue="Disabled"
                                     value={value.date}
                                     fullWidth />
                             </TableCell>

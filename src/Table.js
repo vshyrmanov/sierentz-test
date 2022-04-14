@@ -8,11 +8,13 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {data} from './default';
 import {Fragment} from "react";
-import { getDataTable, getUniqueYear } from './functions';
+import {getDataTable, getSubYears, getUniqueYear} from './functions';
+import CustomTableCell from "./TableCell";
 
 function CustomTable() {
     const dataTable = getDataTable(data);
     const uniqueYears = getUniqueYear(Object.keys(data), data);
+    const subYears = getSubYears(data);
 
     const popUp = () => {
         window.open('/popup',  "_blank", 'height=500,width=1000,scrollbars=yes', );
@@ -21,7 +23,7 @@ function CustomTable() {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell align={"center"} rowSpan={2}>Regions</TableCell>
@@ -29,11 +31,9 @@ function CustomTable() {
                                 <TableCell colSpan={3} align={"center"} key={Math.random() * e}>{e}</TableCell>)}
                         </TableRow>
                         <TableRow>
-                            {uniqueYears.map((e, i) =>
+                            {uniqueYears.map(e =>
                                 <Fragment key={Math.random() * e}>
-                                    <TableCell align={"center"}>XX</TableCell>
-                                    <TableCell align={"center"}>YY</TableCell>
-                                    <TableCell align={"center"}>ZZ</TableCell>
+                                    {subYears.map(e => <TableCell key={Math.random() * 100} align={"center"}>{e}</TableCell>)}
                                 </Fragment>
                             )}
                         </TableRow>
@@ -47,18 +47,14 @@ function CustomTable() {
                                 {uniqueYears.map(e => dataTable.map(i =>
                                     i.region === x.region &&
                                     <Fragment key={Math.random() * e}>
-                                        <TableCell align={"center"} >
-                                            <TableRow onClick={popUp} sx={{ cursor: 'pointer' }}>{i.data[e] && i.data[e].XX.value}</TableRow>
-                                            <TableRow>{i.data[e] && i.data[e].XX.dateRelease}</TableRow>
-                                        </TableCell >
-                                        <TableCell align={"center"} >
-                                            <TableRow onClick={popUp} sx={{ cursor: 'pointer' }}>{i.data[e] && i.data[e].YY.value}</TableRow>
-                                            <TableRow>{i.data[e] && i.data[e].YY.dateRelease}</TableRow>
-                                        </TableCell>
-                                        <TableCell align={"center"} >
-                                            <TableRow onClick={popUp} sx={{ cursor: 'pointer' }}>{i.data[e] && i.data[e].ZZ.value}</TableRow>
-                                            <TableRow>{i.data[e] && i.data[e].ZZ.dateRelease}</TableRow>
-                                        </TableCell>
+                                        {subYears.map(y =>
+                                            <CustomTableCell
+                                                key={Math.random() * 100}
+                                                isPointer={i.data[e]}
+                                                click={popUp}
+                                                value={ i.data[e] && i.data[e][y].value }
+                                            />
+                                        )}
                                     </Fragment>
                                 ))}
                             </TableRow>)}
