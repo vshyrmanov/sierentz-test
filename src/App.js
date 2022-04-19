@@ -5,13 +5,14 @@ import CustomTable from './Table';
 
 function App() {
   return (
-      <BrowserRouter>
-          <Routes>
-              <Route path="/" element={<CustomTable />} />
-              <Route path="/popup" element={<Popup />} />
-              <Route path="*" element={<CustomTable />} />
-          </Routes>
-      </BrowserRouter>
+          <BrowserRouter>
+              <Routes>
+                  <Route path="/" element={<CustomTable />} />
+                  <Route path="/popup" element={<Popup />} />
+                  <Route path="*" element={<CustomTable />} />
+              </Routes>
+          </BrowserRouter>
+
   );
 }
 

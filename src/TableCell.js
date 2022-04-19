@@ -2,6 +2,7 @@ import React from 'react';
 import {TableCell} from "@mui/material";
 
 const CustomTableCell = ({ isPointer, value, click }) => {
+
     return (
         <TableCell
             align="center"

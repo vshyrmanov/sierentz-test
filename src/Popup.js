@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,8 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {getDate} from './functions';
-import {Button, Input, MenuItem, Select, Stack} from "@mui/material";
+import { getDate } from './functions';
+import { Button, Input, MenuItem, Select, Stack } from "@mui/material";
+import { data } from './default';
+
 
 const Popup = () => {
     const [popupData, setPopupData] = useState([
@@ -16,6 +18,9 @@ const Popup = () => {
         {value: 6, date: "20.04.2021", user: "Liza", comment: "comment 3"},
         {value: 7, date: "20.05.2021", user: "Jim", comment: "comment 4"},
     ])
+
+    const [newData, setNewData] = useState()
+    const [currentElement, setCurrentElement] = useState()
 
     let usersArr = popupData.map(e => e.user);
     let selectProps = [...new Set(usersArr)];
@@ -29,21 +34,47 @@ const Popup = () => {
         }
     );
 
-    const handleSubmit = () => {
-        setPopupData([...popupData, value]);
-        console.log(value);
-        setValue({...value, value: "", comment: ""})
-    };
+    useEffect(() => {
+        if (localStorage.getItem('newData')) {
+            setNewData(JSON.parse(localStorage.getItem('newData')))
+        } else  {
+            setNewData(data)
+        }
+        setCurrentElement(JSON.parse(localStorage.getItem('currentElement')))
+    }, [])
 
     const handleValue = (e, type) => {
+        if (type === 'value') {
+            setNewData({
+                ...newData,
+                [`${currentElement.region}`]:
+                    {...newData[`${currentElement.region}`], ['G']:
+                            {...newData[`${currentElement.region}`]['G'], [`${currentElement.year}`]:
+                                    {...newData[`${currentElement.region}`]['G'][`${currentElement.year}`], [`${currentElement.sub}`]:
+                                            {...newData[`${currentElement.region}`]['G'][`${currentElement.year}`][`${currentElement.sub}`], value: e.target.value}}}}})
+        }
         setValue({...value, [type]: e.target.value})
     };
 
-    const closePopUp = () =>  window.close();
+    const testSend = () => {
+        localStorage.setItem('newData', JSON.stringify(newData))
+    }
+
+    const closePopUp = () =>  {
+        window.close()
+    };
+
+    const handleSubmit = () => {
+        testSend()
+        setPopupData([...popupData, value]);
+        console.log(value);
+        setValue({...value, value: "", comment: ""})
+        closePopUp()
+    };
 
     return (
         <>
-            <TableContainer component={Paper}>
+            {newData && <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                         <TableRow>
@@ -68,7 +99,7 @@ const Popup = () => {
                                     value={value.value}
                                     placeholder="Enter value"
                                     type="number"
-                                    onChange={e => handleValue(e, 'value')}
+                                    onChange={(e) => handleValue(e, 'value')}
                                     fullWidth />
                             </TableCell>
                             <TableCell align={"center"}>
@@ -95,7 +126,7 @@ const Popup = () => {
                         </TableRow>
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer>}
             <Stack
                 direction="row"
                 justifyContent="end"
